@@ -96,6 +96,7 @@ def color_transparente(color, opacidad=0.18):
     return f"rgba({r},{g},{b},{opacidad})"
 
 
+
 # =====================================================
 # 3. ESTILOS GENERALES
 # =====================================================
@@ -103,7 +104,9 @@ def color_transparente(color, opacidad=0.18):
 st.html("""
 <style>
 
-/* Fondo general */
+/* =============================================
+   FONDO GENERAL
+   ============================================= */
 
 .stApp,
 [data-testid="stAppViewContainer"],
@@ -135,14 +138,11 @@ st.html("""
     color: #FFFFFF !important;
 }
 
-/* Reducir el gran espacio superior */
+/* Espacio superior compacto */
 
 [data-testid="stSidebarUserContent"] {
     padding-top: 0.6rem !important;
 }
-
-/* Compatibilidad con distintas versiones
-   de Streamlit */
 
 [data-testid="stSidebar"] .block-container {
     padding-top: 0.6rem !important;
@@ -153,7 +153,7 @@ st.html("""
     gap: 0.45rem !important;
 }
 
-/* Encabezados compactos */
+/* Encabezados */
 
 [data-testid="stSidebar"] h2 {
     margin-top: 0 !important;
@@ -173,29 +173,109 @@ st.html("""
     margin-bottom: 0 !important;
 }
 
-/* Separadores más pequeños */
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p {
+    color: #A4B1C4 !important;
+}
+
+/* Separadores */
 
 [data-testid="stSidebar"] hr {
     margin: 0.25rem 0 !important;
 }
 
-/* Etiquetas compactas */
+/* Etiquetas */
 
 [data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
     margin-bottom: 0.1rem !important;
 }
 
-/* Controles */
+
+/* =============================================
+   FILTROS BLANCOS EN LIGHT Y DARK
+   ============================================= */
+
+/* Selectores */
 
 [data-testid="stSidebar"] [data-baseweb="select"] > div,
-[data-testid="stSidebar"] [data-testid="stDateInput"] input {
+[data-testid="stSidebar"] [data-baseweb="select"] > div:hover,
+[data-testid="stSidebar"] [data-baseweb="select"] > div:focus-within {
     background-color: #FFFFFF !important;
-    color: #102B49 !important;
+    color: #303441 !important;
+    border-color: #FFFFFF !important;
     border-radius: 9px !important;
+    min-height: 38px !important;
+    box-shadow: none !important;
+}
+
+/* Textos seleccionados */
+
+[data-testid="stSidebar"]
+[data-baseweb="select"] [data-testid="stMarkdownContainer"],
+[data-testid="stSidebar"]
+[data-baseweb="select"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"]
+[data-baseweb="select"] [role="combobox"],
+[data-testid="stSidebar"]
+[data-baseweb="select"] input,
+[data-testid="stSidebar"]
+[data-baseweb="select"] span {
+    color: #303441 !important;
+    -webkit-text-fill-color: #303441 !important;
+}
+
+/* Flechas */
+
+[data-testid="stSidebar"] [data-baseweb="select"] svg {
+    color: #303441 !important;
+    fill: #303441 !important;
+}
+
+/* Selector de fechas */
+
+[data-testid="stSidebar"]
+[data-testid="stDateInput"] [data-baseweb="input"],
+[data-testid="stSidebar"]
+[data-testid="stDateInput"] [data-baseweb="input"] > div,
+[data-testid="stSidebar"]
+[data-testid="stDateInput"] input {
+    background-color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stSidebar"]
+[data-testid="stDateInput"] input {
+    color: #303441 !important;
+    -webkit-text-fill-color: #303441 !important;
     min-height: 38px !important;
 }
 
-/* Botones */
+/* Icono de calendario */
+
+[data-testid="stSidebar"]
+[data-testid="stDateInput"] svg {
+    color: #838792 !important;
+}
+
+/* Selectores deshabilitados */
+
+[data-testid="stSidebar"]
+[data-baseweb="select"] [aria-disabled="true"],
+[data-testid="stSidebar"]
+[data-baseweb="select"] [aria-disabled="true"] *,
+[data-testid="stSidebar"]
+[data-baseweb="select"] [data-disabled="true"],
+[data-testid="stSidebar"]
+[data-baseweb="select"] [data-disabled="true"] * {
+    color: #A9ABB2 !important;
+    -webkit-text-fill-color: #A9ABB2 !important;
+}
+
+
+/* =============================================
+   BOTONES DE LA BARRA LATERAL
+   ============================================= */
 
 [data-testid="stSidebar"] .st-key-btn_limpiar button,
 [data-testid="stSidebar"] .st-key-btn_actualizar button {
@@ -255,7 +335,7 @@ st.html("""
     margin-bottom: 12px;
 }
 
-/* Títulos de gráficos sin negrita */
+/* Títulos de los gráficos */
 
 [data-testid="stMain"] h3 {
     font-size: 20px !important;
@@ -265,13 +345,40 @@ st.html("""
     margin-bottom: 12px !important;
 }
 
-/* Contenedores */
 
-[data-testid="stVerticalBlockBorderWrapper"] {
+/* =============================================
+   CUADROS DE GRÁFICOS CON FONDO BLANCO
+   INCLUYE TÍTULO Y GRÁFICO
+   ============================================= */
+
+/* Solo los contenedores identificados como gráficos */
+
+[data-testid="stMain"] [class*="st-key-cuadro_grafico_"] {
+    background-color: #FFFFFF !important;
     border-radius: 15px !important;
 }
 
-/* Pantallas pequeñas */
+/* Área interior de Plotly */
+
+[data-testid="stMain"]
+[class*="st-key-cuadro_grafico_"]
+[data-testid="stPlotlyChart"] {
+    background-color: #FFFFFF !important;
+    border-radius: 12px !important;
+}
+
+/* Fondo del elemento gráfico */
+
+[data-testid="stMain"]
+[class*="st-key-cuadro_grafico_"]
+[data-testid="stPlotlyChart"] > div {
+    background-color: #FFFFFF !important;
+}
+
+
+/* =============================================
+   PANTALLAS PEQUEÑAS
+   ============================================= */
 
 @media (max-width: 600px) {
 
@@ -288,69 +395,12 @@ st.html("""
         font-size: 32px !important;
     }
 }
+/* Fondo blanco exclusivo para la tabla de eventos */
 
-/* =============================================
-   FILTROS BLANCOS EN MODO CLARO Y OSCURO
-   ============================================= */
-
-/* Selectores y sus estados */
-[data-testid="stSidebar"] [data-baseweb="select"] > div,
-[data-testid="stSidebar"] [data-baseweb="select"] > div:hover,
-[data-testid="stSidebar"] [data-baseweb="select"] > div:focus-within {
+[data-testid="stMain"] .st-key-cuadro_tabla_eventos {
     background-color: #FFFFFF !important;
-    color: #303441 !important;
-    border-color: #FFFFFF !important;
-    box-shadow: none !important;
+    border-radius: 15px !important;
 }
-
-/* Texto de los selectores */
-[data-testid="stSidebar"] [data-baseweb="select"] input,
-[data-testid="stSidebar"] [data-baseweb="select"] span,
-[data-testid="stSidebar"] [data-baseweb="select"] [role="combobox"] {
-    color: #303441 !important;
-    -webkit-text-fill-color: #303441 !important;
-}
-
-/* Flechas de los selectores */
-[data-testid="stSidebar"] [data-baseweb="select"] svg {
-    color: #303441 !important;
-    fill: #303441 !important;
-}
-
-/* Fondo blanco del selector de fechas */
-[data-testid="stSidebar"] [data-testid="stDateInput"] [data-baseweb="input"],
-[data-testid="stSidebar"] [data-testid="stDateInput"] [data-baseweb="input"] > div,
-[data-testid="stSidebar"] [data-testid="stDateInput"] input {
-    background-color: #FFFFFF !important;
-    border-color: #FFFFFF !important;
-    box-shadow: none !important;
-}
-
-/* Texto de las fechas */
-[data-testid="stSidebar"] [data-testid="stDateInput"] input {
-    color: #303441 !important;
-    -webkit-text-fill-color: #303441 !important;
-}
-
-/* Icono del calendario */
-[data-testid="stSidebar"] [data-testid="stDateInput"] svg {
-    color: #838792 !important;
-}
-
-/* Opciones deshabilitadas */
-[data-testid="stSidebar"] [data-baseweb="select"] [aria-disabled="true"],
-[data-testid="stSidebar"] [data-baseweb="select"] [aria-disabled="true"] *,
-[data-testid="stSidebar"] [data-baseweb="select"] [data-disabled="true"],
-[data-testid="stSidebar"] [data-baseweb="select"] [data-disabled="true"] * {
-    color: #A9ABB2 !important;
-    -webkit-text-fill-color: #A9ABB2 !important;
-}
-
-/* Subtítulo gris */
-[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p {
-    color: #A4B1C4 !important;
-}
-
 </style>
 """)
 
@@ -379,8 +429,8 @@ def grafico(fig, altura=340):
     fig.update_layout(
         template="plotly_white",
         height=altura,
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
         font=dict(color="#263B54", size=12),
         margin=dict(l=15, r=25, t=20, b=35),
         legend_title_text=""
@@ -1325,7 +1375,10 @@ col1, col2 = st.columns(2, gap="medium")
 
 with col1:
 
-    with st.container(border=True):
+    with st.container(
+        border=True,
+        key="cuadro_grafico_inscripciones1"
+    ):
 
         st.subheader("Total de inscripciones por evento")
 
@@ -1394,7 +1447,10 @@ with col1:
 
 with col2:
 
-    with st.container(border=True):
+    with st.container (
+        border=True,
+        key="cuadro_grafico_inscripciones2"
+    ):
 
         st.subheader("Evolución del total de inscripciones")
 
@@ -1471,7 +1527,10 @@ col3, col4 = st.columns(2, gap="medium")
 
 with col3:
 
-    with st.container(border=True):
+    with st.container(
+        border=True,
+        key="cuadro_grafico_inscripciones3"
+    ):
 
         st.subheader("Estados de inscripción")
 
@@ -1514,7 +1573,10 @@ with col3:
 
 with col4:
 
-    with st.container(border=True):
+    with st.container(
+        border=True,
+        key="cuadro_grafico_eventos_modalidad4"
+    ):
 
         st.subheader("Eventos por modalidad")
 
@@ -1566,7 +1628,10 @@ col5, col6 = st.columns(2, gap="medium")
 
 with col5:
 
-    with st.container(border=True):
+    with st.container(
+        border=True,
+        key="cuadro_grafico_inscripciones_categoria5"
+    ):
 
         st.subheader("Inscripciones por categoría")
 
@@ -1623,7 +1688,10 @@ with col5:
 
 with col6:
 
-    with st.container(border=True):
+    with st.container(
+        border=True,
+        key="cuadro_grafico_evetnos_tipo6"
+    ):
 
         st.subheader("Eventos por tipo")
 
@@ -1667,7 +1735,10 @@ with col6:
 
 titulo_seccion("Empresas organizadoras")
 
-with st.container(border=True):
+with st.container(
+    border=True,
+    key="cuadro_grafico_empresa"
+):
 
     st.subheader("Inscripciones por empresa")
 
@@ -1840,7 +1911,10 @@ if not participantes_base.empty:
 
 with col7:
 
-    with st.container(border=True):
+    with st.container(
+        border=True,
+        key="cuadro_grafico_cuentas7"
+    ):
 
         st.subheader(
             "Creación de cuentas respecto al evento"
@@ -1946,7 +2020,9 @@ with col7:
                     r=35,
                     t=20,
                     b=35
-                )
+                ),
+                paper_bgcolor="#FFFFFF",
+                plot_bgcolor="#FFFFFF",
             )
 
             grafico(fig, 350)
@@ -1961,7 +2037,10 @@ with col7:
 
 with col8:
 
-    with st.container(border=True):
+    with st.container(
+        border=True,
+        key="cuadro_grafico_participantes8"
+    ):
 
         st.subheader(
             "Relación de los participantes con Laboral.AI"
@@ -2113,7 +2192,10 @@ if sin_precio_valido > 0:
 # AZUL MARINO #12365B
 # -----------------------------------------------------
 
-with st.container(border=True):
+with st.container(
+    border=True,
+    key="cuadro_grafico_certificados"
+):
 
     st.subheader("Certificados pagados por evento")
 
@@ -2194,7 +2276,10 @@ with st.container(border=True):
 
 titulo_seccion("Detalle de eventos")
 
-with st.container(border=True):
+with st.container(
+    border=True,
+    key="cuadro_tabla_eventos"
+):
 
     conteos = (
         datos.groupby("event_id")

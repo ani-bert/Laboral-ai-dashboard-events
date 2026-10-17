@@ -289,6 +289,68 @@ st.html("""
     }
 }
 
+/* =============================================
+   FILTROS BLANCOS EN MODO CLARO Y OSCURO
+   ============================================= */
+
+/* Selectores y sus estados */
+[data-testid="stSidebar"] [data-baseweb="select"] > div,
+[data-testid="stSidebar"] [data-baseweb="select"] > div:hover,
+[data-testid="stSidebar"] [data-baseweb="select"] > div:focus-within {
+    background-color: #FFFFFF !important;
+    color: #303441 !important;
+    border-color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+/* Texto de los selectores */
+[data-testid="stSidebar"] [data-baseweb="select"] input,
+[data-testid="stSidebar"] [data-baseweb="select"] span,
+[data-testid="stSidebar"] [data-baseweb="select"] [role="combobox"] {
+    color: #303441 !important;
+    -webkit-text-fill-color: #303441 !important;
+}
+
+/* Flechas de los selectores */
+[data-testid="stSidebar"] [data-baseweb="select"] svg {
+    color: #303441 !important;
+    fill: #303441 !important;
+}
+
+/* Fondo blanco del selector de fechas */
+[data-testid="stSidebar"] [data-testid="stDateInput"] [data-baseweb="input"],
+[data-testid="stSidebar"] [data-testid="stDateInput"] [data-baseweb="input"] > div,
+[data-testid="stSidebar"] [data-testid="stDateInput"] input {
+    background-color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+/* Texto de las fechas */
+[data-testid="stSidebar"] [data-testid="stDateInput"] input {
+    color: #303441 !important;
+    -webkit-text-fill-color: #303441 !important;
+}
+
+/* Icono del calendario */
+[data-testid="stSidebar"] [data-testid="stDateInput"] svg {
+    color: #838792 !important;
+}
+
+/* Opciones deshabilitadas */
+[data-testid="stSidebar"] [data-baseweb="select"] [aria-disabled="true"],
+[data-testid="stSidebar"] [data-baseweb="select"] [aria-disabled="true"] *,
+[data-testid="stSidebar"] [data-baseweb="select"] [data-disabled="true"],
+[data-testid="stSidebar"] [data-baseweb="select"] [data-disabled="true"] * {
+    color: #A9ABB2 !important;
+    -webkit-text-fill-color: #A9ABB2 !important;
+}
+
+/* Subtítulo gris */
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p {
+    color: #A4B1C4 !important;
+}
+
 </style>
 """)
 

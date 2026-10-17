@@ -1517,7 +1517,11 @@ with col2:
 # 17. ESTADOS Y MODALIDAD
 # =====================================================
 
-col3, col4 = st.columns(2, gap="medium")
+if modalidad == "Todas":
+    col3, col4 = st.columns(2, gap="medium")
+else:
+    col3 = st.container()
+    col4 = None
 
 
 # -----------------------------------------------------
@@ -1571,45 +1575,47 @@ with col3:
 # TURQUESA
 # -----------------------------------------------------
 
-with col4:
+if modalidad == "Todas":
 
-    with st.container(
-        border=True,
-        key="cuadro_grafico_eventos_modalidad4"
-    ):
+    with col4:
 
-        st.subheader("Eventos por modalidad")
+        with st.container(
+            border=True,
+            key="cuadro_grafico_eventos_modalidad4"
+        ):
 
-        tabla_modalidad = (
-            eventos_filtrados["modality"]
-            .fillna("No informado")
-            .value_counts()
-            .rename_axis("Modalidad")
-            .reset_index(name="Eventos")
-        )
+            st.subheader("Eventos por modalidad")
 
-        if tabla_modalidad.empty:
-            sin_datos("No hay eventos disponibles.")
-
-        else:
-            colores_modalidad = tonos_grafico(
-                COLOR_MODALIDAD,
-                len(tabla_modalidad)
+            tabla_modalidad = (
+                eventos_filtrados["modality"]
+                .fillna("No informado")
+                .value_counts()
+                .rename_axis("Modalidad")
+                .reset_index(name="Eventos")
             )
 
-            fig = px.pie(
-                tabla_modalidad,
-                names="Modalidad",
-                values="Eventos",
-                hole=0.58,
-                color_discrete_sequence=colores_modalidad
-            )
+            if tabla_modalidad.empty:
+                sin_datos("No hay eventos disponibles.")
 
-            fig.update_traces(
-                marker=dict(colors=colores_modalidad)
-            )
+            else:
+                colores_modalidad = tonos_grafico(
+                    COLOR_MODALIDAD,
+                    len(tabla_modalidad)
+                )
 
-            grafico(fig)
+                fig = px.pie(
+                    tabla_modalidad,
+                    names="Modalidad",
+                    values="Eventos",
+                    hole=0.58,
+                    color_discrete_sequence=colores_modalidad
+                )
+
+                fig.update_traces(
+                    marker=dict(colors=colores_modalidad)
+                )
+
+                grafico(fig)
 
 
 # =====================================================
@@ -1618,67 +1624,75 @@ with col4:
 
 titulo_seccion("Categorías y tipos de eventos")
 
-col5, col6 = st.columns(2, gap="medium")
+# Si se selecciona una categoría específica,
+# ocultamos su gráfico y ampliamos Eventos por tipo.
 
+if categoria in ["Todas", "Aún no hay datos"]:
+    col5, col6 = st.columns(2, gap="medium")
+else:
+    col5 = None
+    col6 = st.container()
 
 # -----------------------------------------------------
 # INSCRIPCIONES POR CATEGORÍA
 # NARANJA
 # -----------------------------------------------------
 
-with col5:
+if categoria in ["Todas", "Aún no hay datos"]:
 
-    with st.container(
-        border=True,
-        key="cuadro_grafico_inscripciones_categoria5"
-    ):
+    with col5:
 
-        st.subheader("Inscripciones por categoría")
+        with st.container(
+            border=True,
+            key="cuadro_grafico_inscripciones_categoria5"
+        ):
 
-        categorias_validas = datos[
-            datos["category"].notna()
-        ].copy()
+            st.subheader("Inscripciones por categoría")
 
-        if categorias_validas.empty:
-            sin_datos(
-                "Aún no hay categorías registradas "
-                "en los eventos."
-            )
+            categorias_validas = datos[
+                datos["category"].notna()
+            ].copy()
 
-        else:
-            tabla_categorias = (
-                categorias_validas.groupby(
-                    "category"
-                )["eventguest_id"]
-                .nunique()
-                .reset_index(name="Inscripciones")
-                .sort_values(
-                    "Inscripciones",
-                    ascending=False
+            if categorias_validas.empty:
+                sin_datos(
+                    "Aún no hay categorías registradas "
+                    "en los eventos."
                 )
-            )
 
-            fig = px.bar(
-                tabla_categorias,
-                x="Inscripciones",
-                y="category",
-                orientation="h",
-                color_discrete_sequence=[COLOR_CATEGORIAS]
-            )
-
-            fig.update_traces(
-                marker_color=tonos_grafico(
-                    COLOR_CATEGORIAS,
-                    len(tabla_categorias)
+            else:
+                tabla_categorias = (
+                    categorias_validas.groupby(
+                        "category"
+                    )["eventguest_id"]
+                    .nunique()
+                    .reset_index(name="Inscripciones")
+                    .sort_values(
+                        "Inscripciones",
+                        ascending=False
+                    )
                 )
-            )
 
-            fig.update_yaxes(
-                title=None,
-                categoryorder="total ascending"
-            )
+                fig = px.bar(
+                    tabla_categorias,
+                    x="Inscripciones",
+                    y="category",
+                    orientation="h",
+                    color_discrete_sequence=[COLOR_CATEGORIAS]
+                )
 
-            grafico(fig)
+                fig.update_traces(
+                    marker_color=tonos_grafico(
+                        COLOR_CATEGORIAS,
+                        len(tabla_categorias)
+                    )
+                )
+
+                fig.update_yaxes(
+                    title=None,
+                    categoryorder="total ascending"
+                )
+
+                grafico(fig)
 
 
 # -----------------------------------------------------
@@ -1728,70 +1742,74 @@ with col6:
 
             grafico(fig)
 
-
 # =====================================================
 # 19. EMPRESAS ORGANIZADORAS
 # =====================================================
 
-titulo_seccion("Empresas organizadoras")
+# El gráfico solo se muestra cuando no se ha
+# seleccionado una empresa específica.
 
-with st.container(
-    border=True,
-    key="cuadro_grafico_empresa"
-):
+if empresa in ["Todas", "Aún no hay datos"]:
 
-    st.subheader("Inscripciones por empresa")
+    titulo_seccion("Empresas organizadoras")
 
-    empresas_validas = datos[
-        datos["companyId"].notna()
-        | datos["companyName"].notna()
-    ].copy()
+    with st.container(
+        border=True,
+        key="cuadro_grafico_empresa"
+    ):
 
-    if empresas_validas.empty:
-        sin_datos(
-            "Aún no hay información de empresas "
-            "asociadas a los eventos."
-        )
+        st.subheader("Inscripciones por empresa")
 
-    else:
-        empresas_validas["Empresa"] = (
-            empresas_validas["companyName"]
-            .fillna(empresas_validas["companyId"])
-            .fillna("No informado")
-        )
+        empresas_validas = datos[
+            datos["companyId"].notna()
+            | datos["companyName"].notna()
+        ].copy()
 
-        tabla_empresas = (
-            empresas_validas.groupby(
-                "Empresa"
-            )["eventguest_id"]
-            .nunique()
-            .reset_index(name="Inscripciones")
-            .sort_values(
-                "Inscripciones",
-                ascending=False
+        if empresas_validas.empty:
+            sin_datos(
+                "Aún no hay información de empresas "
+                "asociadas a los eventos."
             )
-        )
 
-        fig = px.bar(
-            tabla_empresas,
-            x="Inscripciones",
-            y="Empresa",
-            orientation="h",
-            color_discrete_sequence=[COLOR_EMPRESAS]
-        )
-
-        fig.update_traces(
-            marker_color=tonos_grafico(
-                COLOR_EMPRESAS,
-                len(tabla_empresas)
+        else:
+            empresas_validas["Empresa"] = (
+                empresas_validas["companyName"]
+                .fillna(empresas_validas["companyId"])
+                .fillna("No informado")
             )
-        )
 
-        fig.update_yaxes(
-            categoryorder="total ascending"
-        )
+            tabla_empresas = (
+                empresas_validas.groupby(
+                    "Empresa"
+                )["eventguest_id"]
+                .nunique()
+                .reset_index(name="Inscripciones")
+                .sort_values(
+                    "Inscripciones",
+                    ascending=False
+                )
+            )
 
-        grafico(fig)
+            fig = px.bar(
+                tabla_empresas,
+                x="Inscripciones",
+                y="Empresa",
+                orientation="h",
+                color_discrete_sequence=[COLOR_EMPRESAS]
+            )
+
+            fig.update_traces(
+                marker_color=tonos_grafico(
+                    COLOR_EMPRESAS,
+                    len(tabla_empresas)
+                )
+            )
+
+            fig.update_yaxes(
+                categoryorder="total ascending"
+            )
+
+            grafico(fig)
 
 
 # =====================================================

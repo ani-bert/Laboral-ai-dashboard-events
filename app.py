@@ -990,15 +990,25 @@ opciones_categorias = sorted(
 
 
 def limpiar_filtros():
-    for clave in [
-        "f_fechas",
-        "f_evento",
-        "f_modalidad",
-        "f_empresa",
-        "f_categoria"
-    ]:
-        st.session_state.pop(clave, None)
+    # Restablecer todos los filtros a sus valores iniciales
 
+    if rango_default is not None:
+        st.session_state["f_fechas"] = rango_default
+
+    st.session_state["f_evento"] = "Todos"
+    st.session_state["f_modalidad"] = "Todas"
+
+    st.session_state["f_empresa"] = (
+        "Todas"
+        if opciones_empresas
+        else "Aún no hay datos"
+    )
+
+    st.session_state["f_categoria"] = (
+        "Todas"
+        if opciones_categorias
+        else "Aún no hay datos"
+    )
 
 # =====================================================
 # 11. BARRA LATERAL COMPACTA
